@@ -1,0 +1,45 @@
+version: "3.7"
+
+services:
+  mongo-primary:
+    image: mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - "/usr/local/docker/volumes/mongo-primary/data/db:/data/db"
+      - "/usr/local/docker/volumes/mongo-primary/etc/mongo:/etc/mongo"
+    command: --config /etc/mongo/mongod.conf
+    networks:
+      mongo_net:
+        ipv4_address: 172.16.238.2
+  mongo-secondary1:
+    image: mongo
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    volumes:
+      - "/usr/local/docker/volumes/mongo-secondary1/data/db:/data/db"
+      - "/usr/local/docker/volumes/mongo-secondary1/etc/mongo:/etc/mongo"
+    command: --config /etc/mongo/mongod.conf
+    networks:
+      mongo_net:
+        ipv4_address: 172.16.238.3
+  mongo-secondary2:
+    image: mongo
+    restart: unless-stopped
+    ports:
+      - "27019:27017"
+    volumes:
+      - "/usr/local/docker/volumes/mongo-secondary2/data/db:/data/db"
+      - "/usr/local/docker/volumes/mongo-secondary2/etc/mongo:/etc/mongo"
+    command: --config /etc/mongo/mongod.conf
+    networks:
+      mongo_net:
+        ipv4_address: 172.16.238.4
+networks:
+  mongo_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.238.0/24"
